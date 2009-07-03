@@ -1,0 +1,29 @@
+NAME = stemc
+VERSION = 0.2
+
+DISTDIR = dist
+SRCDIR = src
+DOCDIR = doc
+TESTDIR = test
+
+.PHONY: build test clean source doc doc-test
+.DEFAULT: build
+.SUBDIRS: $(SRCDIR)
+
+##################################################
+#  Create archive of the source
+
+SOURCE_FILES = $(SRCDIR)/*.ml* $(SRCDIR)/OMakefile
+BASE_FILES = OMakefile OMakeroot README
+EXPORTDIR = $(NAME)-$(VERSION)
+source:
+    mkdir -p $(EXPORTDIR)/$(SRCDIR) $(DISTDIR)
+    cp $(BASE_FILES) $(EXPORTDIR)
+    cp $(SOURCE_FILES) $(EXPORTDIR)/$(SRCDIR)
+    tar -c $(EXPORTDIR) | gzip -f --best > $(DISTDIR)/src-$(NAME)-$(VERSION).tar.gz
+    rm -rf $(EXPORTDIR)
+
+##################################################
+#  Clean up
+clean:
+    rm -rf $(DISTDIR)

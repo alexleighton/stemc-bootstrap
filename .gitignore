@@ -1,0 +1,9 @@
+.omakedb*
+*.omc
+*.cm[ioxa]
+*.[oa]
+
+# Directories
+doc/
+test/
+dist/

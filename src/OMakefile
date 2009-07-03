@@ -1,0 +1,59 @@
+PROGRAM = $(NAME)
+TESTPROGRAM = $(NAME)-test
+
+FILES = nS filesystem pcore ptypes psub parray pio parrot
+TESTFILES = $(FILES) test_ptypes test_pcore test_parray test_parrot test_psub test_pio
+
+USE_OCAMLFIND = true
+
+if $(not $(OCAMLFIND_EXISTS))
+	eprintln(This project requires ocamlfind, but is was not found.)
+	eprintln(You need to install ocamlfind and run "omake --configure".)
+	exit 1
+
+# Libraries used by ocamlfind
+OCAMLPACKS[] =
+	unix
+	str
+	oUnit
+
+BYTE_ENABLED = false
+NATIVE_ENABLED = true
+
+# this is to remove -warn-error that is on by default
+OCAMLFLAGS =
+
+##################################################
+#  Build the executable
+
+build: $(OCamlProgram $(PROGRAM), $(FILES))
+	mkdir -p ../$(DISTDIR)
+	mv $(PROGRAM).opt ../$(DISTDIR)/$(PROGRAM).opt
+#	mv $(PROGRAM).run ../$(DISTDIR)/$(PROGRAM).run
+	mv $(PROGRAM) ../$(DISTDIR)/$(PROGRAM)
+
+# Build the test executable
+
+test: $(OCamlProgram $(TESTPROGRAM), $(set $(TESTFILES)))
+	mkdir -p ../$(TESTDIR)
+	mv $(TESTPROGRAM).opt ../$(TESTDIR)/$(TESTPROGRAM).opt
+	mv $(TESTPROGRAM) ../$(TESTDIR)/$(TESTPROGRAM)
+
+##################################################
+#  Create documentation
+
+doc: build
+	mkdir -p ../$(DOCDIR) ../$(DISTDIR)
+	ocamlfind ocamldoc -package $(concat \,, $(OCAMLPACKS)) -html -d ../$(DOCDIR) -t "$(NAME) Documentation" -hide-warnings -sort $(addsuffix .ml, $(FILES)) *.mli
+	tar -c ../$(DOCDIR) | gzip -f --best > ../$(DISTDIR)/doc-$(NAME).tar.gz
+
+doc-test: test
+	mkdir -p ../$(DOCDIR) ../$(DISTDIR)
+	ocamlfind ocamldoc -package $(concat \,, $(OCAMLPACKS)) -html -d ../$(DOCDIR) -t "$(NAME) Test Documentation" -hide-warnings -sort *.ml *.mli
+
+##################################################
+#  Clean up
+
+clean:
+	rm -f *.cm[iox] *.o
+	rm -rf ../$(DOCDIR) ../$(TESTDIR)

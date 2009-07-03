@@ -1,0 +1,45 @@
+Stem -\------\
+       \      \------\
+       /\      \      \
+      a  small  stack  language
+
+
+
+--\Stem\--
+
+   Stem is a functional, staticly-typed, stack-based language.
+
+
+
+--\Building\--
+
+   To build the compiler:
+
+      $ omake
+
+   To build and run the test suite:
+
+      $ omake test; ./test/stemc-test
+
+
+
+--\License\--
+
+   The stemc compiler is free software: you can redistribute
+   it and/or modify it under the terms of the GNU General
+   Public License as published by the Free Software
+   Foundation, either version 3 of the License, or (at your
+   option) any later version.
+
+   A copy of the license can be found in the LICENSE file.
+
+                             ~~~
+
+                         ______________
+      _/\|\_\_          / Programmer,  \
+    _| .-     \___     / use the Forth! \
+    \/     )     o`o _/_________________/
+   </  ) _/_ )-.___/
+   /  /\(  (/
+   | (__`'` '`
+    '--.)
