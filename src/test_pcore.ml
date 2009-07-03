@@ -74,11 +74,23 @@ let test_swap _ =
   let code = string_of_subroutine main_sub in
     Test_parrot.test_code code "5 3.14 hello"
 
+(** Tests the forloop code for creating a simple for loop. *)
+let test_forloop _ =
+  let output = "0123456789 9876543210" in
+  let i0, i1 = reg "i0", reg "i1" in
+  let body = String.concat "\n"
+    [(forloop 0 10 i0 (print_r i0));
+     (print " ");
+     (forloop 9 (-1) i0 (print_r i0) ~down:true);] in
+  let code = string_of_subroutine (main body) in
+    Test_parrot.test_code code output
+
 (** Core Test Suite *)
 let core_suite = "PIR Core Code Gen Suite" >::: [
-  "test_set"   >:: test_set;
-  "test_clone" >:: test_clone;
-  "test_swap"  >:: test_swap;
+  "test_set"     >:: test_set;
+  "test_clone"   >:: test_clone;
+  "test_swap"    >:: test_swap;
+  "test_forloop" >:: test_forloop;
 ]
 
 let _ = run_test_tt ~verbose:!Test_parrot.verbosity core_suite

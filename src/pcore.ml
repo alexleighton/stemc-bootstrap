@@ -41,3 +41,19 @@ let clone p0 p1 =
 
 let swap r0 r1 =
   sprintf "exchange %s, %s" (sor r0) (sor r1)
+
+(** [forloop start end ireg body] returns a for loop starting at [start]
+    and ending at [end], where the [ireg] register is incremented each
+    iteration. [body] becomes the body of the for loop and is executed each
+    iteration. Optionally, the for loop can be told to count down instead of
+    up. *)
+let forloop ?(down=false) s e ir body =
+  if s < e && down then invalid_arg "forloop: start < end" else ();
+  if s > e && not down then invalid_arg "forloop: start > end" else ();
+  let l = unique_label () in
+  let ir = get_int "forloop" "An int register is required first." ir in
+  let init = sprintf "%s = %i\n%s:\n" ir s l in
+  let rest = sprintf "%s\n%s\nif %s != %i goto %s" body
+    (if down then "dec "^ir else "inc "^ir) ir e l
+  in
+    init ^ rest
