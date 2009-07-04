@@ -17,28 +17,40 @@
  * along with Stem.  If not, see <http://www.gnu.org/licenses/>.
  *)
 
+(** Core PIR code. This is really just a miscellaneous catchall for opcodes
+    the don't fit elsewhere. *)
+
 open Printf
 open Ptypes
 
+(**/**)
 let sor = string_of_register
+(**/**)
 
+(** Generic set op. [set a b] sets the value of [a] to the value of [b]. *)
 let set r0 r1 =
   sprintf "set %s, %s" (sor r0) (sor r1)
 
+(** String literal set op. [set_s a s] sets the value of [a] to [s]. *)
 let set_s r0 s =
   sprintf "set %s, '%s'" (sor r0) s
 
+(** Integer literal set op. [set_i a i] sets the value of [a] to [i]. *)
 let set_i r0 i =
   sprintf "set %s, %i" (sor r0) i
 
+(** Number literal set op. [set_n a n] sets the value of [a] to [n]. *)
 let set_n r0 n =
   sprintf "set %s, %f" (sor r0) n
 
+(** [clone p q] sets the value of [p] to be a copy of [q]. Only works on
+    PMC registers. *)
 let clone p0 p1 =
   let p0 = get_pmc "clone" "A PMC register is required first." p0 in
   let p1 = get_pmc "clone" "A PMC register is required second." p1 in
     sprintf "clone %s, %s" p1 p0
 
+(** Swaps the values of two registers. *)
 let swap r0 r1 =
   sprintf "exchange %s, %s" (sor r0) (sor r1)
 
