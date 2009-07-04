@@ -49,9 +49,9 @@ let test_tabulate _ =
 let test_code_soundness _ =
   let aux = { name = "aux"; is_main = false;
               body = "say a\nsay b\nsay c";
-              params = [(Regular (Int,"a"));
-                        (Named (Num,"b","b"));
-                        (Optional (Str,"c"))];
+              params = [(Regular (`Int,"a"));
+                        (Named (`Num,"b","b"));
+                        (Optional (`Str,"c"))];
               locals = []} in
   let main = main "'aux'(5, 'hello', \"b\" => 3.14)" in
   let code = (string_of_subroutine main)^"\n\n"^(string_of_subroutine aux) in

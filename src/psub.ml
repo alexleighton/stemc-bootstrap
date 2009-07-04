@@ -66,7 +66,7 @@ let make_params all_params =
 
 let make_locals = List.fold_left
   (fun s -> function
-     | Local (typ,name) -> s ^
+     | `Local (typ,name) -> s ^
          (sprintf "\n.local %s %s" (string_of_ptype typ) name)
      | _ -> s) ""
 

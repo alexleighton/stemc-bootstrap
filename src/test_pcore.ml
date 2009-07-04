@@ -46,7 +46,7 @@ let test_set _ =
 
 (** Tests the clone opcode for cloning PMC objects. *)
 let test_clone _ =
-  let p0, p1 = reg "P0", reg "P1" in
+  let p0, p1 = p 0, p 1 in
   let body = String.concat "\n"
     ["$P0 = new 'String'";
      "$P1 = new 'String'";
@@ -77,7 +77,7 @@ let test_swap _ =
 (** Tests the forloop code for creating a simple for loop. *)
 let test_forloop _ =
   let output = "0123456789 9876543210" in
-  let i0, i1 = reg "i0", reg "i1" in
+  let i0, i1 = i 0, i 1 in
   let body = String.concat "\n"
     [(forloop 0 10 i0 (print_r i0));
      (print " ");

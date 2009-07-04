@@ -44,7 +44,7 @@ let test_stdout_printing _ =
 
 (** Tests that files can be created in Parrot using the given opcodes. *)
 let test_file_creation _ =
-  let s0,p0 = reg "s0", reg "p0" in
+  let s0,p0 = s 0, p 0 in
   let body = String.concat "\n"
     [(open_file p0 ~mode:"w" temp_file);
      (open_file p0 ~mode:"r" temp_file);
@@ -59,8 +59,7 @@ let test_file_creation _ =
     read the file in parrot and then checks the input against the output. *)
 let test_file_readall _ =
   with_open_file temp_file fill_temp_file;
-  let p0 = reg "p0" in
-  let s0 = reg "s0" in
+  let p0,s0 = p 0, s 0 in
   let body = String.concat "\n"
     [(readall s0 p0 temp_file);
      (say_r s0)] in
@@ -72,8 +71,7 @@ let test_file_readall _ =
     with what was put into the file. *)
 let test_file_read _ =
   with_open_file temp_file fill_temp_file;
-  let p0 = reg "p0" in
-  let s0 = reg "s0" in
+  let p0,s0 = p 0, s 0 in
   let body = String.concat "\n"
     [(open_file p0 temp_file);
      (readline p0 s0);
@@ -89,7 +87,7 @@ let test_file_read _ =
 (** Tests the close and is_closed functions. *)
 let test_file_closing _ =
   with_open_file temp_file (fun ch -> ());
-  let i0,p0 = reg "i0", reg "p0" in
+  let i0,p0 = i 0, p 0 in
   let body = String.concat "\n"
     [(open_file p0 temp_file);
      (close p0);

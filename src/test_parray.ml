@@ -28,8 +28,8 @@ open OUnit
 
 (** Test creation of an array PMC. *)
 let test_array_creation _ =
-  let p0,p1 = reg "P0", reg "P1" in
-  let i0 = reg "I0" in
+  let p0,p1 = p 0, p 1 in
+  let i0 = i 0 in
   let body = String.concat "\n"
     [(make_array p0 ~size:10);
      (make_array p1);
@@ -42,8 +42,7 @@ let test_array_creation _ =
 (** Test array PMC sizing. Specifically setting the size and then getting the
     size of arrays. *)
 let test_array_sizing _ =
-  let p0 = reg "P0" in
-  let i0 = reg "I0" in
+  let p0,i0 = p 0, i 0 in
   let body = String.concat "\n"
     [(make_array p0);
      (get_size p0 i0);
@@ -58,9 +57,7 @@ let test_array_sizing _ =
 
 (** Test getting and setting of values in an array PMC. *)
 let test_array_getters_setters _ =
-  let p0 = reg "P0" in
-  let i0 = reg "I0" in
-  let i1 = reg "I1" in
+  let p0,i0,i1 = p 0, i 0, i 1 in
   let body = String.concat "\n"
     [(make_array p0);
      (set_size p0 10);

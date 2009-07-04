@@ -56,14 +56,14 @@ let test_register_type _ =
   let m i = msg ^ " " ^ (string_of_int i) ^ "." in
   let assert_eq i r0 r1 = assert_equal ~printer:p ~msg:(m i) r0 r1 in
     for i = 0 to 1000 do
-      assert_eq i (register (spf "i%i" i)) (Reg (Int,i));
-      assert_eq i (register (spf "I%i" i)) (Reg (Int,i));
-      assert_eq i (register (spf "n%i" i)) (Reg (Num,i));
-      assert_eq i (register (spf "N%i" i)) (Reg (Num,i));
-      assert_eq i (register (spf "s%i" i)) (Reg (Str,i));
-      assert_eq i (register (spf "S%i" i)) (Reg (Str,i));
-      assert_eq i (register (spf "p%i" i)) (Reg (PMC,i));
-      assert_eq i (register (spf "P%i" i)) (Reg (PMC,i));
+      assert_eq i (register (spf "i%i" i)) (`Int(i));
+      assert_eq i (register (spf "I%i" i)) (`Int(i));
+      assert_eq i (register (spf "n%i" i)) (`Num(i));
+      assert_eq i (register (spf "N%i" i)) (`Num(i));
+      assert_eq i (register (spf "s%i" i)) (`Str(i));
+      assert_eq i (register (spf "S%i" i)) (`Str(i));
+      assert_eq i (register (spf "p%i" i)) (`PMC(i));
+      assert_eq i (register (spf "P%i" i)) (`PMC(i));
     done
 
 (** Tests that a register representation makes it through several translations
