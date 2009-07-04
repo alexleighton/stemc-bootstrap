@@ -56,37 +56,27 @@ let string_of_ptype : ptype -> string = function
   | `Int -> "int" | `Num -> "num" | `Str -> "string"
   | `PMC -> "pmc"
 
-(** [get_int fn msg reg] returns the string representation of [reg].
-    @raises Invalid_argument with the [fn] name and [msg] given when [reg]
-    is not an int register. *)
+(** [get_int fn msg reg] returns the string representation of [reg]. *)
 let get_int name msg = function
   | `Int(_) as i       -> string_of_register i
   | `Local(`Int,_) as i -> string_of_register i
 
-(** [get_num fn msg reg] returns the string representation of [reg].
-    @raises Invalid_argument with the [fn] name and [msg] given when [reg]
-    is not a num register. *)
+(** [get_num fn msg reg] returns the string representation of [reg]. *)
 let get_num name msg = function
   | `Num(_) as n       -> string_of_register n
   | `Local(`Num,_) as n -> string_of_register n
 
-(** [get_str fn msg reg] returns the string representation of [reg].
-    @raises Invalid_argument with the [fn] name and [msg] given when [reg]
-    is not a string register. *)
+(** [get_str fn msg reg] returns the string representation of [reg]. *)
 let get_str name msg = function
   | `Str(_) as s       -> string_of_register s
   | `Local(`Str,_) as s -> string_of_register s
 
-(** [get_pmc fn msg reg] returns the string representation of [reg].
-    @raises Invalid_argument with the [fn] name and [msg] given when [reg]
-    is not a pmc register. *)
+(** [get_pmc fn msg reg] returns the string representation of [reg]. *)
 let get_pmc name msg = function
   | `PMC(_) as p       -> string_of_register p
   | `Local(`PMC,_) as p -> string_of_register p
 
-(** Returns the index associated with the given register.
-    @raise Invalid_argument when given a local register. Local registers
-    have no index. *)
+(** Returns the index associated with the given register. *)
 let get_register_index = function
   | `Int(i)    -> i
   | `Num(n)    -> n
