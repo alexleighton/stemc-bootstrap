@@ -26,16 +26,15 @@ open Printf
 (** Type representing the 4 types in parrot. *)
 type ptype = [`Int | `Num | `Str | `PMC]
 
-(* (\** A parrot register is a type and an integer. *\) *)
-(* type register = Reg of ptype * int | Local of ptype * string *)
-
+(** A parrot register is a ptype and an integer. OR it is a local register
+    of a ptype and a name. *)
 type register =
     [`Int of int | `Num of int | `Str of int | `PMC of int |
      `Local of ptype * string]
 
-type label = string
-
+(**/**)
 let spf = sprintf
+(**/**)
 
 let fail name msg = raise (Invalid_argument (spf "%s: %s" name msg))
 
@@ -78,7 +77,7 @@ let string_of_register : register -> string = function
   | `Local (_,name) -> name
 
 (** Turns a parrot type into a string. *)
-let string_of_ptype = function
+let string_of_ptype : ptype -> string = function
   | `Int -> "int" | `Num -> "num" | `Str -> "string"
   | `PMC -> "pmc"
 
@@ -86,33 +85,29 @@ let string_of_ptype = function
     @raises Invalid_argument with the [fn] name and [msg] given when [reg]
     is not an int register. *)
 let get_int name msg = function
-  | `Int(_) as i   -> string_of_register i
-  (* | Local (`Int,_) as i -> string_of_register i *)
-  (* | _                  -> fail name msg *)
+  | `Int(_) as i       -> string_of_register i
+  | `Local(`Int,_) as i -> string_of_register i
 
 (** [get_num fn msg reg] returns the string representation of [reg].
     @raises Invalid_argument with the [fn] name and [msg] given when [reg]
     is not a num register. *)
 let get_num name msg = function
-  | `Num(_) as n   -> string_of_register n
-  (* | Local (`Num,_) as n -> string_of_register n *)
-  (* | _                  -> fail name msg *)
+  | `Num(_) as n       -> string_of_register n
+  | `Local(`Num,_) as n -> string_of_register n
 
 (** [get_str fn msg reg] returns the string representation of [reg].
     @raises Invalid_argument with the [fn] name and [msg] given when [reg]
     is not a string register. *)
 let get_str name msg = function
-  | `Str(_) as s   -> string_of_register s
-  (* | Local (`Str,_) as s -> string_of_register s *)
-  (* | _                  -> fail name msg *)
+  | `Str(_) as s       -> string_of_register s
+  | `Local(`Str,_) as s -> string_of_register s
 
 (** [get_pmc fn msg reg] returns the string representation of [reg].
     @raises Invalid_argument with the [fn] name and [msg] given when [reg]
     is not a pmc register. *)
 let get_pmc name msg = function
-  | `PMC(_) as p   -> string_of_register p
-  (* | Local (`PMC,_) as p -> string_of_register p *)
-  (* | _                  -> fail name msg *)
+  | `PMC(_) as p       -> string_of_register p
+  | `Local(`PMC,_) as p -> string_of_register p
 
 (** Returns the index associated with the given register.
     @raise Invalid_argument when given a local register. Local registers
@@ -122,18 +117,13 @@ let get_register_index = function
   | `Num(n)    -> n
   | `Str(s)    -> s
   | `PMC(p)    -> p
-  (* | Local _        -> *)
-  (*     fail "get_register_index" "Local registers have no index." *)
-
-(** Returns the code form of a label, i.e. "<label>:" *)
-let string_of_label : label -> string = fun l -> sprintf "%s:" l
 
 (**/**)
 let label_num = ref 0
 (**/**)
 
 (** Generates a label that is guaranteed to be unique. *)
-let unique_label : unit -> label = fun () ->
+let unique_label = fun () ->
   let lbl = sprintf "label%i" !label_num in
     label_num := !label_num + 1;
     lbl
