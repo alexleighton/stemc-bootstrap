@@ -34,7 +34,7 @@ let delete_temp_file () = Sys.remove temp_file
 
 (** Tests the printing opcodes by printing to stdout. *)
 let test_stdout_printing _ =
-  let s0 = reg "s0" in
+  let s0 = s 0 in
   let body = String.concat "\n"
     [(say "hello"); "$S0 = 'world'"; (say_r s0);
      (print "hello"); (print " "); (print_r s0);] in

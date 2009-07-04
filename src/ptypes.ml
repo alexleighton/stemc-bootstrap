@@ -43,31 +43,6 @@ let i : int -> [> `Int of int] = fun i -> `Int(i)
 let n : int -> [> `Num of int] = fun i -> `Num(i)
 let s : int -> [> `Str of int] = fun i -> `Str(i)
 
-(** [register r] converts a string into a register. The given string should
-    be of the regexp form [inspINSP][0-9]+. *)
-let register r =
-  let len = String.length r in
-    if len < 2 then fail "register" "The string is too short." else
-      let first = r.[0] in
-      let num = try int_of_string (String.sub r 1 (len-1))
-      with Failure _ ->  fail "register" "The register index is not a number."
-      in if num < 0 then fail "register" "The register index is invalid (<0)."
-        else match first with
-          | 'I' | 'i' -> `Int(num)
-          | 'N' | 'n' -> `Num(num)
-          | 'S' | 's' -> `Str(num)
-          | 'P' | 'p' -> `PMC(num)
-          | _ -> fail "register" "Invalid register type."
-
-(** Alias of {!register}. *)
-let reg = register
-
-(** Converts a list of strings into a list of registers. *)
-let registers = List.map register
-
-(** Alias of {!register}. *)
-let register_of_string = register
-
 (** Returns a PIR-legal string representation of the register. *)
 let string_of_register : register -> string = function
   | `Int(i)         -> sprintf "$I%i" i

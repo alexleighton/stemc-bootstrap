@@ -27,9 +27,9 @@ open OUnit
 
 (** Tests setting of the various parrot registers. *)
 let test_set _ =
-  let i0,i1,i2 = reg "I0", reg "I1", reg "I2" in
-  let n0,n1,n2 = reg "N0", reg "N1", reg "N2" in
-  let s0,s1,s2 = reg "S0", reg "S1", reg "S2" in
+  let i0,i1,i2 = i 0, i 1, i 2 in
+  let n0,n1,n2 = n 0, n 1, n 2 in
+  let s0,s1,s2 = s 0, s 1, s 2 in
   let body = String.concat "\n"
     [(set_s s0 "hello");
      (set_s s1 "world");
@@ -59,9 +59,9 @@ let test_clone _ =
 
 (** Tests the swap opcode for swapping two registers. *)
 let test_swap _ =
-  let i0, i1 = reg "I0", reg "I1" in
-  let n0, n1 = reg "N0", reg "N1" in
-  let s0, s1 = reg "S0", reg "S1" in
+  let i0, i1 = i 0, i 1 in
+  let n0, n1 = n 0, n 1 in
+  let s0, s1 = s 0, s 1 in
   let body = String.concat "\n"
     [(set_i i0 5);       (set_i i1 10);
      (set_n n0 3.14);    (set_n n1 2.7);
