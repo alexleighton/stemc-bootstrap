@@ -46,8 +46,7 @@ let set_n r0 n =
 (** [clone p q] sets the value of [p] to be a copy of [q]. Only works on
     PMC registers. *)
 let clone p0 p1 =
-  let p0 = get_pmc "clone" "A PMC register is required first." p0 in
-  let p1 = get_pmc "clone" "A PMC register is required second." p1 in
+  let p0, p1 = get_pmc p0, get_pmc p1 in
     sprintf "clone %s, %s" p1 p0
 
 (** Swaps the values of two registers. *)
@@ -63,7 +62,7 @@ let forloop ?(down=false) s e ir body =
   if s < e && down then invalid_arg "forloop: start < end" else ();
   if s > e && not down then invalid_arg "forloop: start > end" else ();
   let l = unique_label () in
-  let ir = get_int "forloop" "An int register is required first." ir in
+  let ir = get_int ir in
   let init = sprintf "%s = %i\n%s:\n" ir s l in
   let rest = sprintf "%s\n%s\nif %s != %i goto %s" body
     (if down then "dec "^ir else "inc "^ir) ir e l

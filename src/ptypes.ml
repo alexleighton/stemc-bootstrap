@@ -32,19 +32,29 @@ type register =
     [`Int of int | `Num of int | `Str of int | `PMC of int |
      `Local of ptype * string]
 
+(** Integer register type. *)
+type intreg = [`Int of int | `Local of [`Int] * string]
+
+(** Number register type. *)
+type numreg = [`Num of int | `Local of [`Num] * string]
+
+(** String register type. *)
+type strreg = [`Str of int | `Local of [`Str] * string]
+
+(** PMC register type. *)
+type pmcreg = [`PMC of int | `Local of [`PMC] * string]
+
 (**/**)
 let spf = sprintf
 (**/**)
 
-let fail name msg = raise (Invalid_argument (spf "%s: %s" name msg))
-
-let p : int -> [> `PMC of int] = fun i -> `PMC(i)
-let i : int -> [> `Int of int] = fun i -> `Int(i)
-let n : int -> [> `Num of int] = fun i -> `Num(i)
-let s : int -> [> `Str of int] = fun i -> `Str(i)
+let p : int -> pmcreg = fun i -> `PMC(i)
+let i : int -> intreg = fun i -> `Int(i)
+let n : int -> numreg = fun i -> `Num(i)
+let s : int -> strreg = fun i -> `Str(i)
 
 (** Returns a PIR-legal string representation of the register. *)
-let string_of_register : register -> string = function
+let string_of_register = function
   | `Int(i)         -> sprintf "$I%i" i
   | `Num(n)         -> sprintf "$N%i" n
   | `Str(s)         -> sprintf "$S%i" s
@@ -57,23 +67,23 @@ let string_of_ptype : ptype -> string = function
   | `PMC -> "pmc"
 
 (** [get_int fn msg reg] returns the string representation of [reg]. *)
-let get_int name msg = function
-  | `Int(_) as i       -> string_of_register i
-  | `Local(`Int,_) as i -> string_of_register i
+let get_int : intreg -> string = function
+  | `Int(_) as i          -> string_of_register i
+  | `Local(`Int,_) as i   -> string_of_register i
 
 (** [get_num fn msg reg] returns the string representation of [reg]. *)
-let get_num name msg = function
-  | `Num(_) as n       -> string_of_register n
+let get_num : numreg -> string = function
+  | `Num(_) as n        -> string_of_register n
   | `Local(`Num,_) as n -> string_of_register n
 
 (** [get_str fn msg reg] returns the string representation of [reg]. *)
-let get_str name msg = function
-  | `Str(_) as s       -> string_of_register s
+let get_str : strreg -> string = function
+  | `Str(_) as s        -> string_of_register s
   | `Local(`Str,_) as s -> string_of_register s
 
 (** [get_pmc fn msg reg] returns the string representation of [reg]. *)
-let get_pmc name msg = function
-  | `PMC(_) as p       -> string_of_register p
+let get_pmc : pmcreg -> string = function
+  | `PMC(_) as p        -> string_of_register p
   | `Local(`PMC,_) as p -> string_of_register p
 
 (** Returns the index associated with the given register. *)

@@ -22,76 +22,49 @@ open Ptypes
 
 let say ?(out) s = match out with
   | None   -> sprintf "say '%s'" s
-  | Some p -> let p = get_pmc "say" "A PMC register is required." p in
-      sprintf "say %s, '%s'" p s
+  | Some p -> sprintf "say %s, '%s'" (get_pmc p) s
 
 let say_r reg = sprintf "say %s" (string_of_register reg)
 
 let print ?(out) s = match out with
   | None   -> sprintf "print '%s'" s
-  | Some p -> let p = get_pmc "print" "A PMC register is required." p in
-      sprintf "print %s, %s" p s
+  | Some p -> sprintf "print %s, %s" (get_pmc p) s
 
 let print_r ?(out) s = match out with
   | None   -> sprintf "print %s" (string_of_register s)
-  | Some p -> let p = get_pmc "print_r" "A PMC register is required." p in
-      sprintf "print %s, %s" p (string_of_register s)
+  | Some p -> sprintf "print %s, %s" (get_pmc p) (string_of_register s)
 
 (* Valid modes are "r", "w", "wa", "p" *)
 let open_file reg ?(mode="r") filename =
-  let p = get_pmc "open_file" "A PMC register is required." reg in
-    sprintf "%s = open '%s', '%s'" p filename mode
+    sprintf "%s = open '%s', '%s'" (get_pmc reg) filename mode
 
 (* Valid modes are "r", "w", "wa", "p" *)
 let open_file_r p ?(mode="r") s =
-  let p = get_pmc "open_file_r" "A PMC register is required first." p in
-  let s = get_str "open_file_r" "A string register is required second." s in
+  let p, s = get_pmc p, get_str s in
     sprintf "%s = open %s, '%s'" p s mode
 
-let getstdin reg =
-  let p = get_pmc "getstdin" "A PMC register is required." reg in
-    sprintf "%s = getstdin" p
+let getstdin p = sprintf "%s = getstdin" (get_pmc p)
 
-let getstdout reg =
-  let p = get_pmc "getstdout" "A PMC register is required." reg in
-    sprintf "%s = getstdout" p
+let getstdout p = sprintf "%s = getstdout" (get_pmc p)
 
-let getstderr reg =
-  let p = get_pmc "getstdout" "A PMC register is required." reg in
-    sprintf "%s = getstderr" p
+let getstderr p = sprintf "%s = getstderr" (get_pmc p)
 
-let close reg =
-  let p = get_pmc "close" "A PMC register is required." reg in
-    sprintf "close %s" p
+let close p = sprintf "close %s" (get_pmc p)
 
-let is_closed i p =
-  let i = get_int "is_closed" "An integer register is required first." i in
-  let p = get_pmc "is_closed" "A PMC register is required second." p in
-    sprintf "%s = %s.'is_closed'()" i p
+let is_closed i p = sprintf "%s = %s.'is_closed'()" (get_int i) (get_pmc p)
 
-let read s p i =
-  let s = get_str "read" "A string register is required first." s in
-  let p = get_pmc "read" "A PMC register is required second." p in
-    sprintf "%s = read %s, %i" s p i
+let read s p i = sprintf "%s = read %s, %i" (get_str s) (get_pmc p) i
 
 let read_r s p i =
-  let s = get_str "read_r" "A string register is required first." s in
-  let p = get_pmc "read_r" "A PMC register is required second." p in
-  let i = get_int "read_r" "An integer register is required third." i in
+  let s, p, i = get_str s, get_pmc p, get_int i in
     sprintf "%s = read %s, %s" s p i
 
-let readline p s =
-  let p = get_pmc "readline" "A PMC register is required first." p in
-  let s = get_str "readline" "A string register is required second." s in
-    sprintf "%s = readline %s" s p
+let readline p s = sprintf "%s = readline %s" (get_str s) (get_pmc p)
 
 let readall s0 p s1 =
-  let s0 = get_str "readall" "A string register is required first." s0 in
-  let p = get_pmc "readall" "A PMC registe is required second." p in
+  let s0, p = get_str s0, get_pmc p in
     sprintf "%s = new 'FileHandle'\n%s = %s.'readall'('%s')" p s0 p s1
 
 let readall_r s0 p s1 =
-  let s0 = get_str "readall_r" "A string register is required first." s0 in
-  let p = get_pmc "readall_r" "A PMC register is required second." p in
-  let s1 = get_str "readall_r" "A string register is required third." s1 in
+  let s0, p, s1 = get_str s0, get_pmc p, get_str s1 in
     sprintf "%s = %s.'readall'(%s)" s0 p s1
