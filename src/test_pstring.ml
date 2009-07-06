@@ -1,3 +1,4 @@
+
 open OUnit
 open Pstring
 open Ptypes
@@ -65,6 +66,17 @@ let test_sub _ =
   let code = Psub.string_of_subroutine (Psub.main body) in
     Test_parrot.test_code code "ello\nel"
 
+(** Tests the case ops. *)
+let test_cases _ =
+  let s0,s1 = s 0, s 1 in
+  let body = String.concat "\n"
+    [(set_s s0 "hELLO World");
+     (upcase s1 s0); (Pio.say_r s1);
+     (downcase s1 s0); (Pio.say_r s1);
+     (titlecase s1 s0); (Pio.say_r s1);] in
+  let code = Psub.string_of_subroutine (Psub.main body) in
+    Test_parrot.test_code code "HELLO WORLD\nhello world\nHello world"
+
 (** Pstring Test Suite *)
 let pstring_suite = "Pstring Test Suite" >::: [
   "test_ordchr" >:: test_ordchr;
@@ -72,6 +84,7 @@ let pstring_suite = "Pstring Test Suite" >::: [
   "test_repeat" >:: test_repeat;
   "test_length" >:: test_length;
   "test_sub"    >:: test_sub;
+  "test_cases"  >:: test_cases;
 ]
 
 let _ = run_test_tt ~verbose:!Test_parrot.verbosity pstring_suite
