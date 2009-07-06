@@ -1,8 +1,8 @@
 PROGRAM = $(NAME)
 TESTPROGRAM = $(NAME)-test
 
-FILES = nS filesystem pcore ptypes psub parray pio parrot
-TESTFILES = $(FILES) test_ptypes test_pcore test_parray test_parrot test_psub test_pio
+FILES = nS filesystem pcore ptypes psub pstring parray pio parrot
+TESTFILES = $(FILES) test_ptypes test_pcore test_pstring test_parray test_parrot test_psub test_pio
 
 USE_OCAMLFIND = true
 
