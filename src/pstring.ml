@@ -26,10 +26,14 @@ open Ptypes
 let spf = sprintf
 (**/**)
 
+(** [ord i0 s i1] sets the value of [i0] to be the codepoint of the character
+    in [s] at the position indicated by [i1]. *)
 let ord i0 s i1 =
   let i0, i1, s = get_int i0, get_int i1, get_str s in
     spf "%s = ord %s, %s" i0 s i1
 
+(** [chr s i] sets the value of [s] to be the character with the codepoint
+    indicated by [i]. *)
 let chr s i =
   let s, i = get_str s, get_int i in
     spf "%s = chr %s" s i
