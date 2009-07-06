@@ -55,3 +55,17 @@ let concatD s0 s1 =
 let repeat sout sin ireg =
   let sout, sin, ireg = get_str sout, get_str sin, get_int ireg in
     spf "%s = repeat %s, %s" sout sin ireg
+
+(** [length i s] sets the value of [i] as the length (in characters) of [s]. *)
+let length i s =
+  let i, s = get_int i, get_str s in
+    spf "%s = length %s" i s
+
+(** [sub sout sin start ?stop] sets [sout] as the substring of [sin] starting
+    at [start] and optionally ending at [stop]. *)
+let sub sout sin ?(stop) start =
+  let sout, sin, start = get_str sout, get_str sin, get_int start in
+    match stop with
+      | Some i -> let stop = get_int i in
+          spf "%s = substr %s, %s, %s" sout sin start stop
+      | None   -> spf "%s = substr %s, %s" sout sin start

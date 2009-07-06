@@ -41,11 +41,37 @@ let test_repeat _ =
   let code = Psub.string_of_subroutine (Psub.main body) in
     Test_parrot.test_code code "testtesttest"
 
+(** Tests {!Pstring.length}, the length op. *)
+let test_length _ =
+  let s0,s1,i0,i1 = s 0, s 1, i 0, i 1 in
+  let body = String.concat "\n"
+    [(set_s s0 ""); (set_s s1 "hello");
+     (length i0 s0); (length i1 s1);
+     (Pio.say_r i0); (Pio.say_r i1);] in
+  let code = Psub.string_of_subroutine (Psub.main body) in
+    Test_parrot.test_code code "0\n5"
+
+(** Tests {!Pstring.sub}, the substring op. *)
+let test_sub _ =
+  let s0,s1,i0,i1 = s 0, s 1, i 0, i 1 in
+  let body = String.concat "\n"
+    [(set_s s0 "hello");
+     (set_i i0 1);
+     (sub s1 s0 i0);
+     (Pio.say_r s1);
+     (set_i i1 2);
+     (sub s1 s0 i0 ~stop:i1);
+     (Pio.say_r s1);] in
+  let code = Psub.string_of_subroutine (Psub.main body) in
+    Test_parrot.test_code code "ello\nel"
+
 (** Pstring Test Suite *)
 let pstring_suite = "Pstring Test Suite" >::: [
   "test_ordchr" >:: test_ordchr;
   "test_concat" >:: test_concat;
   "test_repeat" >:: test_repeat;
+  "test_length" >:: test_length;
+  "test_sub"    >:: test_sub;
 ]
 
 let _ = run_test_tt ~verbose:!Test_parrot.verbosity pstring_suite
