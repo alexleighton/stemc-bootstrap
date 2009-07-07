@@ -74,21 +74,21 @@ let sub sout sin ?(stop) start =
     characters with capitals have been capitalized. *)
 let upcase s0 s1 = spf "%s = upcase %s" (get_str s0) (get_str s1)
 
-(** Destructive version of {upcase}. *)
+(** Destructive version of {!upcase} . *)
 let upcaseD s = spf "upcase %s" (get_str s)
 
 (** [downcase sout sin] sets [sout] as the same string as [sin] except that all
     characters with capitals have been un-capitalized. *)
 let downcase s0 s1 = spf "%s = downcase %s" (get_str s0) (get_str s1)
 
-(** Destructive version of {downcase}. *)
+(** Destructive version of {!downcase} . *)
 let downcaseD s = spf "downcase %s" (get_str s)
 
 (** [titlecase sout sin] sets [sout] as the same string as [sin] except that
     the first character of the string has been capitalized. *)
 let titlecase s0 s1 = spf "%s = titlecase %s" (get_str s0) (get_str s1)
 
-(** Destructive version of {titlecase}. *)
+(** Destructive version of {!.titlecase} . *)
 let titlecaseD s = spf "titlecase %s" (get_str s)
 
 (** Escapes all non-ascii characters to backslashed escape sequences. *)
