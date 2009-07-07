@@ -2,6 +2,9 @@
 *.omc
 *.cm[ioxa]
 *.[oa]
+src/expressionLexer.ml
+src/expressionParser.ml
+src/expressionParser.mli
 
 # Directories
 doc/

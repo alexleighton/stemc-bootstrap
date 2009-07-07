@@ -1,7 +1,9 @@
 PROGRAM = $(NAME)
 TESTPROGRAM = $(NAME)-test
 
-FILES = nS filesystem pcore ptypes psub pstring parray pio parrot
+PARSERS = expressionLexer expressionParser
+
+FILES = nS filesystem pcore ptypes psub pstring parray pio parrot parser stypes $(PARSERS)
 TESTFILES = $(FILES) test_ptypes test_pcore test_pstring test_parray test_parrot test_psub test_pio
 
 USE_OCAMLFIND = true
@@ -17,26 +19,29 @@ OCAMLPACKS[] =
 	str
 	oUnit
 
-BYTE_ENABLED = false
-NATIVE_ENABLED = true
+BYTE_ENABLED = true
+NATIVE_ENABLED = false
 
 # this is to remove -warn-error that is on by default
-OCAMLFLAGS =
+OCAMLFLAGS = -g
 
 ##################################################
 #  Build the executable
 
 build: $(OCamlProgram $(PROGRAM), $(FILES))
+	export OCAMLRUNPARAM="b1"
 	mkdir -p ../$(DISTDIR)
-	mv $(PROGRAM).opt ../$(DISTDIR)/$(PROGRAM).opt
-#	mv $(PROGRAM).run ../$(DISTDIR)/$(PROGRAM).run
+#	mv $(PROGRAM).opt ../$(DISTDIR)/$(PROGRAM).opt
+	mv $(PROGRAM).run ../$(DISTDIR)/$(PROGRAM).run
 	mv $(PROGRAM) ../$(DISTDIR)/$(PROGRAM)
 
 # Build the test executable
 
 test: $(OCamlProgram $(TESTPROGRAM), $(set $(TESTFILES)))
+	export OCAMLRUNPARAM="b1"
 	mkdir -p ../$(TESTDIR)
-	mv $(TESTPROGRAM).opt ../$(TESTDIR)/$(TESTPROGRAM).opt
+#	mv $(TESTPROGRAM).opt ../$(TESTDIR)/$(TESTPROGRAM).opt
+	mv $(TESTPROGRAM).run ../$(TESTDIR)/$(TESTPROGRAM).opt
 	mv $(TESTPROGRAM) ../$(TESTDIR)/$(TESTPROGRAM)
 
 ##################################################
@@ -56,4 +61,5 @@ doc-test: test
 
 clean:
 	rm -f *.cm[iox] *.o
+	rm -f $(addsuffix .ml, $(PARSERS)) $(addsuffix .mli, $(PARSERS))
 	rm -rf ../$(DOCDIR) ../$(TESTDIR)
