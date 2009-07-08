@@ -53,6 +53,12 @@ let clone p0 p1 =
 let swap r0 r1 =
   sprintf "exchange %s, %s" (sor r0) (sor r1)
 
+(** [exit i] exits the program with the exit status in [i]. *)
+let exit i = sprintf "exit %s" (get_int i)
+
+(** [die s]] kills the program with the message in [s]. *)
+let die s = sprintf "die %s" (get_str s)
+
 (** [forloop start end ireg body] returns a for loop starting at [start]
     and ending at [end], where the [ireg] register is incremented each
     iteration. [body] becomes the body of the for loop and is executed each
